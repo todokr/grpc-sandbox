@@ -1,5 +1,4 @@
 import com.google.protobuf.gradle.id
-import org.jooq.meta.jaxb.*
 
 plugins {
     kotlin("jvm") version "1.9.25"
@@ -8,6 +7,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     id("com.google.protobuf") version "0.9.4"
     id("org.jooq.jooq-codegen-gradle") version "3.19.18"
+    id("org.flywaydb.flyway") version "11.3.0"
 }
 
 group = "io.github.todokr"
@@ -37,6 +37,7 @@ dependencies {
     implementation("io.grpc:grpc-services")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
+    implementation("org.jooq:jooq")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("org.postgresql:postgresql")
@@ -51,6 +52,12 @@ dependencies {
     developmentOnly("org.jooq:jooq-codegen")
     developmentOnly("org.jooq:jooq-meta")
     jooqCodegen("org.postgresql:postgresql")
+}
+
+buildscript {
+    dependencies {
+        classpath("org.flywaydb:flyway-database-postgresql:11.3.0")
+    }
 }
 
 dependencyManagement {
@@ -98,13 +105,25 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+val dbDriver = "org.postgresql.Driver"
+val jdbcUrl = "jdbc:postgresql://localhost:5454/main"
+val dbUser = "postgres"
+val dbPass = "devtest"
+
+flyway {
+    driver = dbDriver
+    url = jdbcUrl
+    user = dbUser
+    password = dbPass
+}
+
 jooq {
     configuration {
         jdbc {
-            driver = "org.postgresql.Driver"
-            url = "jdbc:postgresql://localhost:5454/main"
-            user = "postgres"
-            password = "devtest"
+            driver = dbDriver
+            url = jdbcUrl
+            user = dbUser
+            password = dbPass
         }
         generator {
             database {

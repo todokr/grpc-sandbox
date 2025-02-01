@@ -1,6 +1,7 @@
 package io.github.todokr.gprcserver.todos
 
-import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Component
+import org.jooq.DSLContext
 
 interface TodoQuery {
 
@@ -34,8 +35,8 @@ sealed interface Filter {
     data class OrFilter(val filters: List<Filter>): Filter
 }
 
-@Repository
-class TodoQueryImpl: TodoQuery {
+@Component
+class TodoQueryImpl(private val dslContext: DSLContext): TodoQuery {
     override fun list(criteria: Criteria): List<Todo> {
         return listOf(
             Todo(

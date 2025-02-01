@@ -1,0 +1,100 @@
+syntax = "proto3";
+package io.github.todokr.todo;
+
+message Todo {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  Progress progress = 4;
+}
+
+message FindTodoRequest {
+  string id = 1;
+}
+
+message FindTodoResponse {
+  Todo todo = 1;
+}
+
+enum Progress {
+  PROGRESS_UNSPECIFIED = 0;
+  PROGRESS_TODO = 1;
+  PROGRESS_DOING = 2;
+  PROGRESS_DONE = 3;
+}
+
+enum Item {
+  ITEM_UNSPECIFIED = 0;
+  ITEM_ID = 1;
+  ITEM_TITLE = 2;
+  ITEM_DESCRIPTION = 3;
+  ITEM_PROGRESS = 4;
+}
+
+// `item = value` に相当
+message EqPredicate {
+  Item item = 1;
+  string value = 2;
+}
+
+// `item <> value` に相当
+message NeqPredicate {
+  Item item = 1;
+  string value = 2;
+}
+
+// `item in (value1, value2)` に相当
+message InPredicate {
+  Item item = 1;
+  repeated string values = 2;
+}
+
+// `item not in (value1, value2)` に相当
+message NotInPredicate {
+  Item item = 1;
+  repeated string values = 2;
+}
+
+message Filter {
+  oneof filter {
+    UnaryFilter simple = 1;
+    AndFilter and = 2;
+    OrFilter or = 3;
+  }
+}
+
+// 単一の条件フィルタ
+message UnaryFilter {
+  oneof predicate {
+    EqPredicate eq = 2;
+    NeqPredicate neq = 3;
+    InPredicate in = 4;
+    NotInPredicate not_in = 5;
+  }
+}
+
+// AND条件フィルタ
+message AndFilter {
+  repeated Filter filer = 1;
+}
+
+// OR条件フィルタ
+message OrFilter {
+  repeated Filter filter = 1;
+}
+
+message ListTodosRequest {
+  string tenant_id = 1;
+  repeated Filter filter = 2;
+  // 取得する件数。最大は10。最大を超える場合は10。
+  int64 limit = 3;
+}
+
+message ListTodosResponse {
+  repeated Todo todos = 1;
+}
+
+service TodoService {
+  rpc FindTodo (FindTodoRequest) returns (FindTodoResponse);
+  rpc ListTodos (ListTodosRequest) returns (ListTodosResponse);
+}

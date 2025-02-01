@@ -115,6 +115,7 @@ flyway {
     url = jdbcUrl
     user = dbUser
     password = dbPass
+    cleanDisabled = false
 }
 
 jooq {

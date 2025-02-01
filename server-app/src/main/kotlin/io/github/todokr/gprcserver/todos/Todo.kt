@@ -7,7 +7,7 @@ enum class Progress {
 }
 
 data class Todo(
-    val id: Long,
+    val id: String,
     val title: String,
     val description: String,
     val progress: Progress

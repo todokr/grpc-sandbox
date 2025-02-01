@@ -1,8 +1,10 @@
 package io.github.todokr.gprcserver.todos
 
+import org.springframework.stereotype.Repository
+
 interface TodoQuery {
 
-    fun list()
+    fun list(criteria: Criteria): List<Todo>
 }
 
 data class Criteria(
@@ -30,4 +32,18 @@ sealed interface Filter {
     data class UnaryFilter(val predicate: Predicate): Filter
     data class AndFilter(val filters: List<Filter>): Filter
     data class OrFilter(val filters: List<Filter>): Filter
+}
+
+@Repository
+class TodoQueryImpl: TodoQuery {
+    override fun list(criteria: Criteria): List<Todo> {
+        return listOf(
+            Todo(
+                id = "123",
+                title = "title",
+                description = "description",
+                progress = Progress.TODO,
+            )
+        )
+    }
 }

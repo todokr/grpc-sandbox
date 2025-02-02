@@ -37,6 +37,7 @@ dependencies {
     implementation("io.grpc:grpc-services")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.jooq:jooq")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -116,6 +117,7 @@ flyway {
     user = dbUser
     password = dbPass
     cleanDisabled = false
+    locations = arrayOf("filesystem:db/migration")
 }
 
 jooq {

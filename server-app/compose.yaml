@@ -3,6 +3,12 @@ x-db: &db
   environment:
     - POSTGRES_PASSWORD=devtest
     - POSTGRES_DB=main
+    - LC_COLLATE=ja_JP.UTF-8
+    - LC_CTYPE=ja_JP.UTF-8
+    - LC_MESSAGES=ja_JP.UTF-8
+    - LC_MONETARY=C.UTF-8
+    - LC_NUMERIC=C.UTF-8
+    - LC_TIME=C.UTF-8
   healthcheck:
     test: ["CMD", "pg_isready", "-U", "postgres"]
 
@@ -13,7 +19,7 @@ services:
       - "5454:5432"
     command: -c "hba_file=/etc/postgresql/pg_hba.conf"
     volumes:
-      - db_primary_data:/var/lib/postgresql/data
+      - ./docker/db_primary_data:/var/lib/postgresql/data
       - ./docker/db_primary/pg_hba.conf:/etc/postgresql/pg_hba.conf
       - ./docker/db_primary/init.sh:/docker-entrypoint-initdb.d/init.sh
     healthcheck:
@@ -25,7 +31,7 @@ services:
       - "5455:5432"
     entrypoint: /etc/postgresql/entrypoint.sh
     volumes:
-      - db_read_replica_data:/var/lib/postgresql/data
+      - ./docker/db_read_replica_data:/var/lib/postgresql/data
       - ./docker/db_read_replica/entrypoint.sh:/etc/postgresql/entrypoint.sh
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]

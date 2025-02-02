@@ -1,12 +1,17 @@
+
 spring:
   application:
     name: server-app
 
-  datasource:
-    url: jdbc:mysql://localhost:5432/main
+  primary-datasource:
+    jdbc-url: jdbc:postgresql://localhost:5454/main
     username: postgres
     password: devtest
     driver-class-name: org.postgresql.Driver
 
-    hikari:
-      auto-commit: false
+  replica-datasource:
+    jdbc-url: jdbc:postgresql://localhost:5455/main
+    username: postgres
+    password: devtest
+    driver-class-name: org.postgresql.Driver
+

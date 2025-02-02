@@ -1,5 +1,6 @@
 package todoapp.management.contoller
 
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import todoapp.management.CreateTodoCommand
 import todoapp.management.ListTodoQuery
@@ -22,10 +23,16 @@ class TodoController(
     fun get(@PathVariable id: String): Todo? = todoService.find(id)
 
     @PostMapping
-    fun create(@RequestBody command: CreateTodoCommand) = todoService.create(command)
+    fun create(@RequestBody command: CreateTodoCommand): ResponseEntity<Todo> {
+        val todo = todoService.create(command)
+        return ResponseEntity.ok(todo)
+    }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: String, @RequestBody command: UpdateTodoCommand) = todoService.update(id, command)
+    fun update(@PathVariable id: String, @RequestBody command: UpdateTodoCommand): ResponseEntity<Todo> {
+        val todo = todoService.update(id, command)
+        return ResponseEntity.ok(todo)
+    }
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: String) = todoService.delete(id)

@@ -3,38 +3,31 @@ x-db: &db
   environment:
     - POSTGRES_PASSWORD=devtest
     - POSTGRES_DB=main
-    - LC_COLLATE=ja_JP.UTF-8
-    - LC_CTYPE=ja_JP.UTF-8
-    - LC_MESSAGES=ja_JP.UTF-8
-    - LC_MONETARY=C.UTF-8
-    - LC_NUMERIC=C.UTF-8
-    - LC_TIME=C.UTF-8
   healthcheck:
     test: ["CMD", "pg_isready", "-U", "postgres"]
 
 services:
   db_primary:
     <<: *db
+    container_name: primary
     ports:
       - "5454:5432"
-    command: -c "hba_file=/etc/postgresql/pg_hba.conf"
+    entrypoint: /etc/postgresql/entrypoint.sh
     volumes:
-      - ./docker/db_primary_data:/var/lib/postgresql/data
+      - ./docker/db_primary/entrypoint.sh:/etc/postgresql/entrypoint.sh
       - ./docker/db_primary/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./docker/db_primary_data:/var/lib/postgresql/data
       - ./docker/db_primary/init.sh:/docker-entrypoint-initdb.d/init.sh
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
 
   db_read_replica:
     <<: *db
+    container_name: read_replica
     ports:
       - "5455:5432"
     entrypoint: /etc/postgresql/entrypoint.sh
     volumes:
       - ./docker/db_read_replica_data:/var/lib/postgresql/data
       - ./docker/db_read_replica/entrypoint.sh:/etc/postgresql/entrypoint.sh
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
     depends_on:
       db_primary:
         condition: service_healthy

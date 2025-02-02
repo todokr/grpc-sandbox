@@ -28,7 +28,7 @@ class TodoService (
         todoRepository.findById(todoId)
 
     @Transactional
-    fun create(command: CreateTodoCommand) {
+    fun create(command: CreateTodoCommand): Todo {
         val todo = Todo(
             id = idGenerator.gen(),
             title = command.title,
@@ -36,10 +36,11 @@ class TodoService (
             progress = TodoProgress.TODO
         )
         todoRepository.store(todo)
+        return todo;
     }
 
     @Transactional
-    fun update(todoId: String, command: UpdateTodoCommand) {
+    fun update(todoId: String, command: UpdateTodoCommand): Todo {
         val todo = Todo(
             id = todoId,
             title = command.title,
@@ -47,6 +48,7 @@ class TodoService (
             progress = command.progress
         )
         todoRepository.store(todo)
+        return todo;
     }
 
     @Transactional

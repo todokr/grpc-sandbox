@@ -15,3 +15,8 @@ spring:
     password: devtest
     driver-class-name: org.postgresql.Driver
 
+  grpc:
+    server:
+      reflection:
+        enabled: true
+      port: 9090

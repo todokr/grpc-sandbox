@@ -32,15 +32,17 @@ repositories {
 extra["springGrpcVersion"] = "0.3.0"
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("io.grpc:grpc-services")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-jdbc")
-    implementation("org.jooq:jooq")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE")
+    implementation("org.springframework.boot:spring-boot-starter-jdbc")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    implementation("io.grpc:grpc-services")
+    implementation("org.jooq:jooq")
+    implementation("net.logstash.logback:logstash-logback-encoder:8.1")
     runtimeOnly("org.postgresql:postgresql")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")

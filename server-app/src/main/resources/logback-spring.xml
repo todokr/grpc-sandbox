@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProfile name="default">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder><pattern>%d{HH:mm:ss} %highlight(%5.5level) %24.24logger{24} - %msg %marker%n%xEx</pattern></encoder>
+        </appender>
+        <root level="INFO"><appender-ref ref="STDOUT"/></root>
+    </springProfile>
+</configuration>
